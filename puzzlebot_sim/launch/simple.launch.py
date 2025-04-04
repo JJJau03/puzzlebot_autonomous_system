@@ -9,7 +9,7 @@ def generate_launch_description():
     pkg_dir = get_package_share_directory('puzzlebot_sim') 
     
     # URDF file path
-    urdf_file = os.path.join(pkg_dir, 'urdf', 'puzzlebot.urdf')  
+    urdf_file = os.path.join(pkg_dir, 'urdf', 'puzzlebot.urdf.xacro')  
     
     # Robot State Publisher node
     robot_state_publisher = Node(

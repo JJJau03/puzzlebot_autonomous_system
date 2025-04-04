@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot name="puzzlebot_sim" xmlns:xacro="https://www.ros.org/wiki/xacro">
+
+<!-- Include Gazebo Parameters -->
+  <xacro:include filename="$(find puzzlebot_sim)/urdf/puzzlebot_gazebo.xacro" />
+  
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.013364 -0.0032741 0.059157"
+        rpy="0 0 0" />
+      <mass
+        value="0.044377" />
+      <inertia
+        ixx="1.907E-05"
+        ixy="3.9543E-08"
+        ixz="8.1803E-09"
+        iyy="1.003E-05"
+        iyz="1.4482E-07"
+        izz="2.7967E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://puzzlebot_sim/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.62745 0.62745 0.62745 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://puzzlebot_sim/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="caster_link">
+    <inertial>
+      <origin
+        xyz="-0.14616 -1.3844E-05 -0.0092423"
+        rpy="0 0 0" />
+      <mass
+        value="0.0072145" />
+      <inertia
+        ixx="3.1717E-07"
+        ixy="-1.4431E-13"
+        ixz="1.9594E-23"
+        iyy="2.4295E-07"
+        iyz="9.4803E-24"
+        izz="3.8962E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://puzzlebot_sim/meshes/caster_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.10196 0.10196 0.10196 0.25" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://puzzlebot_sim/meshes/caster_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="caster_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="caster_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="wheel_R_link">
+    <inertial>
+      <origin
+        xyz="5.2736E-16 -0.0013952 6.0868E-12"
+        rpy="0 0 0" />
+      <mass
+        value="0.027001" />
+      <inertia
+        ixx="1.5436E-05"
+        ixy="-5.7827E-20"
+        ixz="-2.6837E-12"
+        iyy="3.062E-05"
+        iyz="1.8414E-19"
+        izz="1.5436E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://puzzlebot_sim/meshes/wheel_R_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 0.35" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://puzzlebot_sim/meshes/wheel_R_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_R_joint"
+    type="continuous">
+    <origin
+      xyz="-0.00012819 -0.0905 0.025"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="wheel_R_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="3"
+      velocity="0.5" />
+  </joint>
+  <link
+    name="wheel_L_link">
+    <inertial>
+      <origin
+        xyz="6.5226E-16 -0.0036048 6.0863E-12"
+        rpy="0 0 0" />
+      <mass
+        value="0.027001" />
+      <inertia
+        ixx="1.5436E-05"
+        ixy="-4.2989E-20"
+        ixz="-2.2287E-12"
+        iyy="3.062E-05"
+        iyz="-1.8947E-19"
+        izz="1.5436E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://puzzlebot_sim/meshes/wheel_L_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 0.35" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://puzzlebot_sim/meshes/wheel_L_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_L_joint"
+    type="continuous">
+    <origin
+      xyz="-0.00012819 0.0955 0.025"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="wheel_L_link" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      effort="3"
+      velocity="0.5" />
+  </joint>
+</robot>
