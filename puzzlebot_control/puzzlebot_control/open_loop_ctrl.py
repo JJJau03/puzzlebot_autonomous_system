@@ -6,7 +6,6 @@ from std_msgs.msg import Float32
 from geometry_msgs.msg import Twist
 
 
-#Class Definition
 class OpenLoopCtrl(Node):
     def __init__(self):
         super().__init__('open_loop_ctrl')
@@ -17,73 +16,87 @@ class OpenLoopCtrl(Node):
         self.cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 10)
 
         # Time-based control variables
-        self.state = 0  # 0: forward, 1: rotate, 2: forward, etc.
-        self.side_count = 0  # Count how many sides of the square we've completed
+        self.state = 0  # 0: rotate, 1: forward, 2: stop
         self.state_start_time = self.get_clock().now()
 
+        # Current position and waypoints
+        self.x = 0.0
+        self.y = 0.0
+        self.waypoints = [(1.0, 1.0), (1.0, 0.0), (0.5, 0.5), (0.0, 0.0)]  # Updated waypoints
+        self.current_waypoint_index = 0
+        
         # Define speeds
         self.linear_speed = 0.2  # m/s
         self.angular_speed = 0.5  # rad/s
-
-        # Define durations (seconds)
-        self.forward_time = 0.5 / self.linear_speed   # Time to move 2m (side length)
-        self.rotate_time = (np.pi/9.2)/ self.angular_speed  # Time to rotate 90 deg
-
+        
+        # Initialize movement parameters for first waypoint
+        self.update_movement_parameters()
+        
         # Timer to update state machine
         self.timer_period = 0.2  # 10 Hz control loop
         self.timer = self.create_timer(self.timer_period, self.control_loop)
-
         self.get_logger().info('Open loop controller initialized!')
         
+    def update_movement_parameters(self):
+        """Calculate movement parameters for current waypoint"""
+        if self.current_waypoint_index < len(self.waypoints):
+            self.final_x, self.final_y = self.waypoints[self.current_waypoint_index]
+            self.angle = np.arctan2((self.final_y-self.y), (self.final_x-self.x))
+            self.distance = np.sqrt((self.final_x-self.x)**2 + (self.final_y-self.y)**2)
+            self.forward_time = self.distance / self.linear_speed
+            if self.x ==0.0:
+                self.rotate_time = abs(self.angle/4) / self.angular_speed
+            else:
+                self.rotate_time = abs(self.angle/3) / self.angular_speed
+            self.get_logger().info(f'Moving to waypoint {self.current_waypoint_index+1}: ({self.final_x}, {self.final_y})')
+    
     def control_loop(self):
         now = self.get_clock().now()
         elapsed_time = (now - self.state_start_time).nanoseconds * 1e-9
-
-        self.get_logger().info(f"Start: {self.state_start_time.nanoseconds * 1e-9}, NOW: {now.nanoseconds * 1e-9:.2f}s")
-        self.get_logger().info(f"State: {self.state}, Elapsed: {elapsed_time:.2f}s")
-
         cmd = Twist()
-
+        
         if self.state == 0:
-            # Move forward (one side of square)
-            cmd.linear.x = self.linear_speed
-            self.get_logger().info('Moving forward...')
-            if elapsed_time >= self.forward_time:
+            # Rotate to face the goal
+            cmd.angular.z = np.sign(self.angle) * self.angular_speed
+            self.get_logger().info('Rotating to face goal...')
+            if elapsed_time >= self.rotate_time:
                 self.state = 1
                 self.state_start_time = now
-                self.side_count += 1
-                self.get_logger().info(f'Finished side {self.side_count}. Starting rotation...')
-
+                self.get_logger().info('Finished rotation. Moving forward...')
+                
         elif self.state == 1:
-            # Rotate 90 degrees
-            cmd.angular.z = self.angular_speed
-            self.get_logger().info('Rotating 90 degrees...')
-            if elapsed_time >= self.rotate_time:
-                if self.side_count < 4:  # If we haven't completed all sides
-                    self.state = 0  # Go back to moving forward
+            # Move forward to goal
+            cmd.linear.x = self.linear_speed
+            self.get_logger().info('Moving forward to goal...')
+            if elapsed_time >= self.forward_time:
+                # Update position to current waypoint
+                self.x = self.final_x
+                self.y = self.final_y
+                
+                # Move to next waypoint or stop
+                self.current_waypoint_index += 1
+                if self.current_waypoint_index < len(self.waypoints):
+                    self.update_movement_parameters()
+                    self.state = 0  # Start with rotation for next waypoint
                     self.state_start_time = now
-                    self.get_logger().info('Finished rotation. Moving forward...')
-                else:  # Square completed
-                    self.state = 2  # Go to stop state
+                    self.get_logger().info('Starting movement to next waypoint...')
+                else:
+                    self.state = 2  # All waypoints reached
                     self.state_start_time = now
-                    self.get_logger().info('Square completed. Stopping...')
-
+                    self.get_logger().info('All waypoints reached. Stopping...')
+                    
         elif self.state == 2:
             # Stop
             cmd.linear.x = 0.0
             cmd.angular.z = 0.0
             self.get_logger().info('Stopped.')
-            # Optionally: cancel the timer after stopping
-            self.timer.cancel()
+            self.timer.cancel()  # Stop the control loop
 
-        # Publish velocity command
         self.cmd_vel_pub.publish(cmd)
 
-
-    # Wrap to Pi function
-    def wrap_to_Pi(self,theta):
-        result = np.fmod((theta+np.pi),(2*np.pi))
-        if (result<0):
+    def wrap_to_Pi(self, theta):
+        result = np.fmod((theta + np.pi), (2 * np.pi))
+        if (result < 0):
             result += 2 * np.pi
         return result - np.pi
 
@@ -96,21 +109,18 @@ class OpenLoopCtrl(Node):
             rclpy.spin_once(self, timeout_sec=0.1)
         self.get_logger().info(f'ROS time is active! Start time: {now.nanoseconds * 1e-9:.2f}s')
 
-#Main
+
 def main(args=None):
     rclpy.init(args=args)
-
     node = OpenLoopCtrl()
-
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
         pass
     finally:
-        if rclpy.ok():  # Ensure shutdown is only called once
+        if rclpy.ok():
             rclpy.shutdown()
         node.destroy_node()
 
-#Execute Node
 if __name__ == '__main__':
     main()

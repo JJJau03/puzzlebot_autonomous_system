@@ -1,0 +1,11 @@
+<?xml version="1.0"?> 
+
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+    
+    <gazebo>
+        <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+            <parameters>$(find puzzlebot_description)/config/puzzlebot_controller.yaml</parameters>
+        </plugin>
+    </gazebo>
+
+</robot>
