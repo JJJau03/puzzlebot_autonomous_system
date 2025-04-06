@@ -3,13 +3,9 @@
 
     <ros2_control type="system" name="RobotSystem">
         
-        <!-- <hardware>
-            <plugin>gz_ros2_control/GazeboSimSystem</plugin>
-        </hardware> -->
-
         <hardware>
             <plugin>ign_ros2_control/IgnitionSystem</plugin>
-            <param name="use_sim_time">true</param>  /this one works
+            <param name="use_sim_time">true</param>  
         </hardware>
   
         <!-- Define the wheel joints and control interfaces -->

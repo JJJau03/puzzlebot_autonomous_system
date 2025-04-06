@@ -8,6 +8,14 @@
   <!-- Include ros2_control Plugins -->
   <xacro:include filename="$(find puzzlebot_description)/urdf/puzzlebot_ros2_control.xacro"/>
   
+  <link name="world"/>  <!-- Gazebo's global fixed frame -->
+
+  <joint name="world_to_base_joint" type="fixed">
+    <parent link="world"/>    
+    <child link="base_link"/>   
+    <origin xyz="0 0 0.025" rpy="0 0 0"/>  
+  </joint>
+
   <link
     name="base_link">
     <inertial>
@@ -123,7 +131,7 @@
       <material
         name="">
         <color
-          rgba="1 1 1 0.35" />
+          rgba="0 0 0 1" />
       </material>
     </visual>
     <collision>
@@ -177,7 +185,7 @@
       <material
         name="">
         <color
-          rgba="1 1 1 0.35" />
+          rgba="0 0 0 1" />
       </material>
     </visual>
     <collision>

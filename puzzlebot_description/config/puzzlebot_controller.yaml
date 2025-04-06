@@ -16,5 +16,5 @@ diff_drive_controller:
     wheel_separation: 0.5  
     wheel_radius: 0.1      
     publish_rate: 50.0
-
-    # Additional params for controller, like PID or gains
+    cmd_vel_topic: "cmd_vel_unstamped"
+    use_stamped_vel: false
