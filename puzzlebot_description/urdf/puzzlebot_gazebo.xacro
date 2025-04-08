@@ -5,6 +5,7 @@
     <gazebo>
         <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
             <parameters>$(find puzzlebot_description)/config/puzzlebot_controller.yaml</parameters>
+            <topic>/model/puzzlebot/cmd_vel</topic>
         </plugin>
     </gazebo>
 
