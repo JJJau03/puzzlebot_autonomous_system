@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot name="puzzlebot_description" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find puzzlebot_description)/urdf/puzzlebot_gazebo.xacro"/>
+  
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.0311276646061178 -0.000393166696613219 0.0531196798063029"
+        rpy="0 0 0" />
+      <mass
+        value="0.366663937433186" />
+      <inertia
+        ixx="0.000443597261923638"
+        ixy="2.7152222827706E-08"
+        ixz="8.1802690172069E-09"
+        iyy="0.00064570752626862"
+        iyz="1.44815018929688E-07"
+        izz="0.00107960203901423" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find puzzlebot_description)/meshes/base2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.627450980392157 0.627450980392157 0.627450980392157 1" />
+      </material>
+    </visual>
+
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find puzzlebot_description)/meshes/base2_link.STL" />
+      </geometry>
+    </collision>
+
+    <!-- <collision>
+    <origin xyz="0 0 0.025" rpy="0 0 0" />
+    <geometry>
+        <box size="0.15 0.12 0.05"/>  Adjust dimensions to exclude rear wheel 
+    </geometry>
+    </collision> -->
+
+  </link>
+  <link
+    name="wheel_R_link">
+    <inertial>
+      <origin
+        xyz="9.43689570931383E-16 -0.00139524833908905 6.08737105861623E-12"
+        rpy="0 0 0" />
+      <mass
+        value="0.027001354907131" />
+      <inertia
+        ixx="1.5435724477858E-05"
+        ixy="-2.91123667833288E-20"
+        ixz="-2.36920343658405E-12"
+        iyy="3.06203871623889E-05"
+        iyz="2.14369935190257E-19"
+        izz="1.5435720455502E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find puzzlebot_description)/meshes/wheel_R_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find puzzlebot_description)/meshes/wheel_R_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_R_joint"
+    type="continuous">
+    <origin
+      xyz="-0.000128185410686141 -0.0905 0.05"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="wheel_R_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-3.14159265358979"
+      upper="3.14159265358979"
+      effort="3"
+      velocity="0.5" />
+  </joint>
+  <link
+    name="wheel_L_link">
+    <inertial>
+      <origin
+        xyz="6.52256026967279E-16 -0.0036047538118145 6.08631114257241E-12"
+        rpy="0 0 0" />
+      <mass
+        value="0.0270013549071305" />
+      <inertia
+        ixx="1.54357203032021E-05"
+        ixy="-4.29832503438494E-20"
+        ixz="-2.2286740856822E-12"
+        iyy="3.06203871623885E-05"
+        iyz="-1.89471157853599E-19"
+        izz="1.54357246301574E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find puzzlebot_description)/meshes/wheel_L_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find puzzlebot_description)/meshes/wheel_L_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_L_joint"
+    type="continuous">
+    <origin
+      xyz="-0.000128185410686599 0.0955 0.05"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="wheel_L_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-3.14159265358979"
+      upper="3.14159265358979"
+      effort="3"
+      velocity="0.5" />
+  </joint>
+</robot>

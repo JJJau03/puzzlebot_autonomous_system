@@ -19,6 +19,11 @@
   <depend>rclpy</depend>
   <depend>robot_state_publisher</depend>
   <depend>joint_state_publisher_gui</depend>
+  <depend>ros2_control</depend>
+  <depend>ros2_controllers</depend>
+  <depend>controller_manager</depend>
+  <depend>hardware_interface</depend>
+  <depend>gazebo_ros2_control</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

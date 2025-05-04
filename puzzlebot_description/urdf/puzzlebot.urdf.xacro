@@ -6,14 +6,15 @@
   <xacro:include filename="$(find puzzlebot_description)/urdf/puzzlebot_gazebo.xacro"/>
 
   <!-- Include ros2_control Plugins -->
-  <xacro:include filename="$(find puzzlebot_description)/urdf/puzzlebot_ros2_control.xacro"/>
+  <!-- <xacro:include filename="$(find puzzlebot_description)/urdf/puzzlebot_ros2_control.xacro"/> -->
   
-  <link name="world"/>  <!-- Gazebo's global fixed frame -->
+  <!-- Add this near the top of your URDF, after <robot> tag -->
+  <link name="odom"/>
 
-  <joint name="world_to_base_joint" type="fixed">
-    <parent link="world"/>    
-    <child link="base_link"/>   
-    <origin xyz="0 0 0.025" rpy="0 0 0"/>  
+  <joint name="odom_joint" type="fixed">
+    <parent link="odom"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
   <link
@@ -54,7 +55,7 @@
       </geometry>
     </collision>
   </link>
-  <link
+  <!-- <link
     name="caster_link">
     <inertial>
       <origin
@@ -104,7 +105,7 @@
       link="caster_link" />
     <axis
       xyz="0 0 0" />
-  </joint>
+  </joint> -->
   <link
     name="wheel_R_link">
     <inertial>
@@ -156,8 +157,8 @@
     <axis
       xyz="0 1 0" />
     <limit
-      effort="3"
-      velocity="0.5" />
+      effort="0.5"
+      velocity="5.0" />
   </joint>
   <link
     name="wheel_L_link">
@@ -208,9 +209,31 @@
     <child
       link="wheel_L_link" />
     <axis
-      xyz="0 -1 0" />
+      xyz="0 1 0" />
     <limit
-      effort="3"
-      velocity="0.5" />
+      effort="0.5"
+      velocity="5.0" />
   </joint>
+
+  <link name="camera_link">
+    <visual>
+        <geometry>
+            <box size="0.020 0.020 0.020"/> <!-- Simple box for visualization -->
+        </geometry>
+        <material name="blue">
+            <color rgba="0 0 0.8 1"/>
+        </material>
+    </visual>
+    <inertial>
+        <mass value="0.01"/>
+        <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="camera_joint" type="fixed">
+      <parent link="base_link"/> 
+      <child link="camera_link"/>
+      <origin xyz="0.04 0 0.06" rpy="0 0 0"/> <!-- Adjust position as needed -->
+  </joint>
+
 </robot>
