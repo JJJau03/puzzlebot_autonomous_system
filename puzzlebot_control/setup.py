@@ -25,7 +25,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'open_loop_ctrl = puzzlebot_control.open_loop_ctrl:main'
+            'open_loop_ctrl = puzzlebot_control.open_loop_ctrl:main',
+            'test2 = puzzlebot_control.test2:main',
         ],
     },
 )
