@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  
+  <gazebo>
+    <plugin filename="libignition-gazebo-diff-drive-system.so" name="ignition::gazebo::systems::DiffDrive">
+        <!-- Joint names (must match URDF exactly) -->
+        <left_joint>wheel_L_joint</left_joint>
+        <right_joint>wheel_R_joint</right_joint>
+        
+        <!-- Critical TF Settings -->
+        <odom_frame>odom</odom_frame>           <!-- Must be "odom" -->
+        <robot_base_frame>base_link</robot_base_frame> <!-- Must match URDF -->
+        <publish_odom>true</publish_odom>       <!-- Publish /odom topic -->
+        <publish_odom_tf>true</publish_odom_tf> <!-- Enable TF publishing -->
+        
+        <!-- Physics -->
+        <wheel_separation>0.181</wheel_separation>
+        <wheel_radius>0.05</wheel_radius>
+        <topic>cmd_vel</topic>
+    </plugin>
+  </gazebo>
+
+</robot>

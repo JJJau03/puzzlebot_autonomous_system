@@ -4,18 +4,7 @@
 
   <!-- Include Gazebo Parameters -->
   <xacro:include filename="$(find puzzlebot_description)/urdf/puzzlebot_gazebo.xacro"/>
-
-  <!-- Include ros2_control Plugins -->
-  <!-- <xacro:include filename="$(find puzzlebot_description)/urdf/puzzlebot_ros2_control.xacro"/> -->
-  
-  <!-- Add this near the top of your URDF, after <robot> tag -->
-  <link name="odom"/>
-
-  <joint name="odom_joint" type="fixed">
-    <parent link="odom"/>
-    <child link="base_link"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-  </joint>
+  <!-- <xacro:include filename="$(find puzzlebot_description)/urdf/p.xacro"/> -->
 
   <link
     name="base_link">

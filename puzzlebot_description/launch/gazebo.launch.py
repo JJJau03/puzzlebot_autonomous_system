@@ -47,7 +47,8 @@ def generate_launch_description():
             '-z', '0.0254',
            
         ],
-        output='screen'
+        output='screen',
+        parameters=[{'use_sim_time': True}]
     )
 
     # ROS-Ignition Bridge
@@ -57,18 +58,24 @@ def generate_launch_description():
         arguments=[
             '/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist',
             '/odom@nav_msgs/msg/Odometry[ignition.msgs.Odometry',
-            #'/model/puzzlebot/tf@tf2_msgs/msg/TFMessage[ignition.msgs.Pose_V',
-            "/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock]"
+            '/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock',
+            # Add these TF bridges:
+            '/world/empty/model/puzzlebot/link/base_link/pose@geometry_msgs/msg/PoseStamped[ignition.msgs.Pose',
+            '/world/empty/model/puzzlebot/pose@geometry_msgs/msg/PoseStamped[ignition.msgs.Pose'
         ],
-        output='screen'
+        output='screen',
+        remappings=[
+            ('/world/empty/model/puzzlebot/link/base_link/pose', '/puzzlebot/base_link_pose'),
+            ('/world/empty/model/puzzlebot/pose', '/puzzlebot/pose')
+        ]
     )
 
     test = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['0', '0', '0', '0', '0', '0', 'odom', 'puzzlebot/odom'],
-        output='screen',
-    )
+        arguments=['0', '0', '0', '0', '0', '0', 'odom', 'base_link'],
+        output='screen'
+    )   
 
     return LaunchDescription([
         model_arg,
@@ -76,5 +83,5 @@ def generate_launch_description():
         gazebo,
         spawn_entity,
         bridge,
-        test
+        #test
     ])

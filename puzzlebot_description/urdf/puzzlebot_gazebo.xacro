@@ -23,7 +23,7 @@
   </gazebo>
 
   <!-- Wheel friction coefficients -->
-  <!-- <gazebo reference="wheel_L_link">
+  <gazebo reference="wheel_L_link">
     <mu1>0.8</mu1>
     <mu2>0.8</mu2>
     <kp>100000.0</kp>
@@ -35,9 +35,9 @@
     <mu2>0.8</mu2>
     <kp>100000.0</kp>
     <kd>10.0</kd>
-  </gazebo> -->
+  </gazebo>
 
-  <gazebo reference="wheel_R_link">
+  <!-- <gazebo reference="wheel_R_link">
     <mu1>100000000000000.0</mu1>
     <mu2>100000000000000.0</mu2>
     <kp>1000000000000.0</kp>
@@ -55,7 +55,7 @@
     <minDepth>0.001</minDepth>
     <maxVel>0.1</maxVel>
     <fdir1>0 1 0</fdir1>
-  </gazebo>
+  </gazebo> -->
 
   <!-- <gazebo reference="caster_link">
     <mu1>0.1</mu1>
